@@ -3,7 +3,9 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
       tsconfig: {
-        strict: false
+        strict: false,
+        esModuleInterop: true,
+        types: ['jest', 'node']
       }
     }]
   },
