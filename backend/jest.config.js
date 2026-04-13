@@ -2,11 +2,7 @@
 module.exports = {
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
-      tsconfig: {
-        strict: false,
-        esModuleInterop: true,
-        types: ['jest', 'node']
-      }
+      tsconfig: './tsconfig.test.json'
     }]
   },
   testEnvironment: 'node',
