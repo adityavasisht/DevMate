@@ -2,6 +2,7 @@ import path from 'path'
 import { defineConfig } from '@prisma/config'
 import dotenv from 'dotenv'
 
+// Only load .env file if it exists (not in CI)
 dotenv.config()
 
 export default defineConfig({
