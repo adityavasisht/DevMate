@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import * as profileService from '../services/profile.service'
 
-// GET /api/profiles
+
 export const getAllProfiles = async (req: Request, res: Response) => {
   try {
     const profiles = await profileService.getAllProfiles()
@@ -12,7 +12,7 @@ export const getAllProfiles = async (req: Request, res: Response) => {
   }
 }
 
-// GET /api/profiles/me
+
 export const getMyProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId
@@ -31,7 +31,7 @@ export const getMyProfile = async (req: Request, res: Response) => {
   }
 }
 
-// POST /api/profiles
+
 export const createProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId
@@ -65,7 +65,7 @@ export const createProfile = async (req: Request, res: Response) => {
   }
 }
 
-// PUT /api/profiles
+
 export const updateProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId
