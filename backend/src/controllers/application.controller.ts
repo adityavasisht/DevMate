@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import * as applicationService from '../services/application.service'
 
-// POST /api/applications/:jobId — Developer applies
+
 export const applyToJob = async (req: Request, res: Response) => {
   try {
     const jobId = req.params.jobId as string
@@ -31,7 +31,7 @@ export const applyToJob = async (req: Request, res: Response) => {
   }
 }
 
-// GET /api/applications/job/:jobId — Company sees applicants
+
 export const getJobApplications = async (req: Request, res: Response) => {
   try {
     const jobId = req.params.jobId as string
@@ -54,7 +54,7 @@ export const getJobApplications = async (req: Request, res: Response) => {
   }
 }
 
-// GET /api/applications/me — Developer sees their applications
+
 export const getMyApplications = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId
