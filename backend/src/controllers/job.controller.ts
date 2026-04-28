@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import * as jobService from '../services/job.service'
 
-// GET /api/jobs
+
 export const getAllJobs = async (req: Request, res: Response) => {
   try {
     const jobs = await jobService.getAllJobs()
@@ -12,7 +12,7 @@ export const getAllJobs = async (req: Request, res: Response) => {
   }
 }
 
-// GET /api/jobs/:id
+
 export const getJobById = async (req: Request, res: Response) => {
   try {
     const  id   = req.params.id as string
@@ -31,7 +31,7 @@ export const getJobById = async (req: Request, res: Response) => {
   }
 }
 
-// POST /api/jobs
+
 export const createJob = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId
@@ -60,7 +60,7 @@ export const createJob = async (req: Request, res: Response) => {
   }
 }
 
-// DELETE /api/jobs/:id
+
 export const deleteJob = async (req: Request, res: Response) => {
   try {
     const  id  = req.params.id as string
