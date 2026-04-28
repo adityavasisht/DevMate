@@ -1,8 +1,8 @@
 import prisma from '../config/db'
 
-// Developer applies to a job
+
 export const applyToJob = async (userId: string, jobId: string) => {
-  // Get the developer's profile
+
   const profile = await prisma.profile.findUnique({
     where: { userId }
   })
@@ -11,7 +11,7 @@ export const applyToJob = async (userId: string, jobId: string) => {
     throw new Error('PROFILE_NOT_FOUND')
   }
 
-  // Check if already applied
+
   const existingApplication = await prisma.application.findFirst({
     where: {
       jobId,
@@ -23,7 +23,7 @@ export const applyToJob = async (userId: string, jobId: string) => {
     throw new Error('ALREADY_APPLIED')
   }
 
-  // Check job exists
+
   const job = await prisma.job.findUnique({
     where: { id: jobId }
   })
@@ -45,9 +45,9 @@ export const applyToJob = async (userId: string, jobId: string) => {
   return application
 }
 
-// Get all applications for a job (company views)
+
 export const getApplicationsForJob = async (jobId: string, userId: string) => {
-  // Verify job belongs to this company
+
   const job = await prisma.job.findUnique({
     where: { id: jobId }
   })
@@ -66,7 +66,7 @@ export const getApplicationsForJob = async (jobId: string, userId: string) => {
   return applications
 }
 
-// Get all jobs a developer has applied to
+
 export const getMyApplications = async (userId: string) => {
   const applications = await prisma.application.findMany({
     where: { userId },
