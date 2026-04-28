@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 
 export const requireRole = (...roles: ('DEVELOPER' | 'COMPANY')[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    // req.user is set by authenticate middleware
+
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' })
       return
