@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { authenticate } from '../../middleware/auth.middleware'
 
-// Mock the env module so tests don't need a real .env file
 jest.mock('../../config/env', () => ({
   env: {
     JWT_SECRET: 'test_secret_key_for_testing',
@@ -10,14 +9,12 @@ jest.mock('../../config/env', () => ({
   },
 }))
 
-// Helper to create a mock Express request
 const mockRequest = (authHeader?: string): Partial<Request> => ({
   headers: {
     authorization: authHeader,
   },
 })
 
-// Helper to create a mock Express response
 const mockResponse = (): Partial<Response> => {
   const res: Partial<Response> = {}
   res.status = jest.fn().mockReturnValue(res)
@@ -25,7 +22,6 @@ const mockResponse = (): Partial<Response> => {
   return res
 }
 
-// Mock next function
 const mockNext: NextFunction = jest.fn()
 
 describe('authenticate middleware', () => {
@@ -35,7 +31,6 @@ describe('authenticate middleware', () => {
   })
 
   it('should call next() when token is valid', () => {
-    // Create a valid token
     const payload = { userId: 'user-123', role: 'DEVELOPER' }
     const token = jwt.sign(payload, 'test_secret_key_for_testing')
 
@@ -44,9 +39,7 @@ describe('authenticate middleware', () => {
 
     authenticate(req as Request, res as Response, mockNext)
 
-    // next() should have been called
     expect(mockNext).toHaveBeenCalledTimes(1)
-    // req.user should be set
     expect((req as any).user).toBeDefined()
     expect((req as any).user.userId).toBe('user-123')
   })
@@ -74,7 +67,6 @@ describe('authenticate middleware', () => {
   })
 
   it('should return 401 when token is expired', () => {
-    // Create an already-expired token
     const payload = { userId: 'user-123', role: 'DEVELOPER' }
     const token = jwt.sign(payload, 'test_secret_key_for_testing', { expiresIn: '0s' })
 
@@ -89,7 +81,6 @@ describe('authenticate middleware', () => {
   })
 
   it('should return 401 when token has wrong secret', () => {
-    // Sign with a different secret
     const payload = { userId: 'user-123', role: 'DEVELOPER' }
     const token = jwt.sign(payload, 'wrong_secret')
 
