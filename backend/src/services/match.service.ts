@@ -6,14 +6,14 @@ import redisClient from '../config/redis'
 import { notifyUser } from '../config/socket'
 import { findCandidateProfiles } from './embedding.service'
 
-// Initialize Gemini chat model
+
 const chatModel = new ChatGoogleGenerativeAI({
   apiKey: env.GEMINI_API_KEY,
   model: 'gemini-2.5-flash',
   temperature: 0.3
 })
 
-// Prompt template for AI matching
+
 const matchPrompt = PromptTemplate.fromTemplate(`
 You are an expert technical recruiter. Analyze how well each developer matches the job requirements.
 
@@ -46,7 +46,7 @@ Only respond with the JSON, nothing else.
 `)
 
 export const matchDevelopersToJob = async (jobId: string, userId: string) => {
-  // 1. Get the job
+
   const job = await prisma.job.findUnique({
     where: { id: jobId }
   })
@@ -54,25 +54,25 @@ export const matchDevelopersToJob = async (jobId: string, userId: string) => {
   if (!job) throw new Error('JOB_NOT_FOUND')
   if (job.userId !== userId) throw new Error('UNAUTHORIZED')
 
-  // 2. Check Redis cache first
+
   const cacheKey = `match:job:${jobId}`
   const cachedResult = await redisClient.get(cacheKey)
 
   if (cachedResult) {
-    console.log('⚡ Cache hit — returning cached matches')
+
     return JSON.parse(cachedResult)
   }
 
-  console.log('🔍 Cache miss — running AI matching')
 
-  // 3. Get candidate profiles
+
+
   const profiles = await findCandidateProfiles(5)
 
   if (profiles.length === 0) {
     return []
   }
 
-  // 4. Format candidates for prompt
+
   const candidatesText = profiles.map((profile, index) => `
     Candidate ${index + 1}:
     ID: ${profile.id}
@@ -82,7 +82,7 @@ export const matchDevelopersToJob = async (jobId: string, userId: string) => {
     Bio: ${profile.bio || 'Not provided'}
   `).join('\n')
 
-  // 5. Run AI matching
+
   const formattedPrompt = await matchPrompt.format({
     jobTitle: job.title,
     jobDescription: job.description,
@@ -95,14 +95,14 @@ export const matchDevelopersToJob = async (jobId: string, userId: string) => {
   const aiResponse = await chatModel.invoke(formattedPrompt)
   let responseText = aiResponse.content as string
 
-  // 6. Clean response — remove markdown code blocks if present
+
   responseText = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
 
-  // 7. Parse AI response
+
   const parsed = JSON.parse(responseText)
   const aiMatches = parsed.matches
 
-  // 8. Save matches to database
+
   const savedMatches = await Promise.all(
     aiMatches.map(async (match: {
       profileId: string
@@ -140,15 +140,15 @@ export const matchDevelopersToJob = async (jobId: string, userId: string) => {
 
   const sortedMatches = savedMatches.sort((a, b) => b.score - a.score)
 
-  // 9. Cache results for 1 hour
+
   await redisClient.setEx(
     cacheKey,
     3600,
     JSON.stringify(sortedMatches)
   )
-  console.log('💾 Matches cached in Redis for 1 hour')
 
-  // 10. Send real-time notifications to matched developers
+
+
   for (const match of sortedMatches) {
     const profile = await prisma.profile.findUnique({
       where: { id: match.profileId }
