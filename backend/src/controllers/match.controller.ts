@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import * as matchService from '../services/match.service'
 
-// POST /api/matches/job/:jobId — Company triggers matching
+
 export const matchForJob = async (req: Request, res: Response) => {
   try {
     const jobId = req.params.jobId as string
@@ -27,7 +27,7 @@ export const matchForJob = async (req: Request, res: Response) => {
   }
 }
 
-// GET /api/matches/job/:jobId — Company sees matches
+
 export const getJobMatches = async (req: Request, res: Response) => {
   try {
     const jobId = req.params.jobId as string
@@ -50,7 +50,7 @@ export const getJobMatches = async (req: Request, res: Response) => {
   }
 }
 
-// GET /api/matches/me — Developer sees their matches
+
 export const getMyMatches = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId
