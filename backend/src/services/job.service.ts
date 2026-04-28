@@ -1,6 +1,6 @@
 import prisma from '../config/db'
 
-// Get all jobs
+
 export const getAllJobs = async () => {
   const jobs = await prisma.job.findMany({
     include: {
@@ -18,7 +18,7 @@ export const getAllJobs = async () => {
   return jobs
 }
 
-// Get job by id
+
 export const getJobById = async (jobId: string) => {
   const job = await prisma.job.findUnique({
     where: { id: jobId },
@@ -34,7 +34,7 @@ export const getJobById = async (jobId: string) => {
   return job
 }
 
-// Create a job
+
 export const createJob = async (
   userId: string,
   data: {
@@ -55,9 +55,9 @@ export const createJob = async (
   return job
 }
 
-// Delete a job
+
 export const deleteJob = async (jobId: string, userId: string) => {
-  // Find the job first
+
   const job = await prisma.job.findUnique({
     where: { id: jobId }
   })
@@ -66,7 +66,7 @@ export const deleteJob = async (jobId: string, userId: string) => {
     throw new Error('JOB_NOT_FOUND')
   }
 
-  // Make sure the job belongs to this user
+
   if (job.userId !== userId) {
     throw new Error('UNAUTHORIZED')
   }
