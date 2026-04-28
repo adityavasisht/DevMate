@@ -1,6 +1,5 @@
 import prisma from '../config/db'
 
-// Get a profile by userId
 export const getProfileByUserId = async (userId: string) => {
   const profile = await prisma.profile.findUnique({
     where: { userId },
@@ -18,7 +17,6 @@ export const getProfileByUserId = async (userId: string) => {
   return profile
 }
 
-// Get all profiles
 export const getAllProfiles = async () => {
   const profiles = await prisma.profile.findMany({
     include: {
@@ -37,7 +35,6 @@ export const getAllProfiles = async () => {
   return profiles
 }
 
-// Create a profile
 export const createProfile = async (
   userId: string,
   data: {
@@ -49,7 +46,6 @@ export const createProfile = async (
     experience?: number
   }
 ) => {
-  // Check if profile already exists
   const existingProfile = await prisma.profile.findUnique({
     where: { userId }
   })
@@ -68,7 +64,6 @@ export const createProfile = async (
   return profile
 }
 
-// Update a profile
 export const updateProfile = async (
   userId: string,
   data: {
@@ -80,7 +75,6 @@ export const updateProfile = async (
     experience?: number
   }
 ) => {
-  // Check if profile exists
   const existingProfile = await prisma.profile.findUnique({
     where: { userId }
   })

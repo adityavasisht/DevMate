@@ -21,17 +21,14 @@ initializeSocket(httpServer)
 app.use(cors())
 app.use(express.json())
 
-// Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-// Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/profiles', profileRoutes)
 app.use('/api/jobs', jobRoutes)
 app.use('/api/matches', matchRoutes)
 app.use('/api/applications', applicationRoutes)
 
-// Health check
 app.get('/health', async (req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`
